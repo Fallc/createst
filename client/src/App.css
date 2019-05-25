@@ -1,18 +1,8 @@
-.App {
-    /* text-align: center; */
+/* General Styling */
+
+  .App {
     box-sizing: border-box;
   }
-  
-  /* .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 1rem;
-  }
-  
-  .App-link {
-    color: #61dafb;
-  } */
   
   .Card {
     width: 300px;
@@ -23,16 +13,12 @@
     display: grid;
     grid-template-rows: auto auto;
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    background-color: white;
-    /* background-image: linear-gradient(to right, #FDC830 , #F37335);
-    color: white; */
-  
+    background-color: white;  
     cursor: pointer;
   }
   
   .Card h3 {
     font-size: 1.5rem;
-    /* color: #3d5170; */
   }
   
   .Card:hover {

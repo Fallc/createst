@@ -1,3 +1,5 @@
+// Study Landing Page Component
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -7,12 +9,12 @@ import Header from "../layout/Header";
 
 class LandingStudy extends React.Component {
 
+    // storing link to tasks
     state = {
         link: `/${this.props.match.params.studyid}/${this.props.match.params.groupid}/active`
     }
 
     render() {
-        // console.log(this.state.link)
         return (
             <div>
                 <Header />
@@ -53,8 +55,6 @@ class LandingStudy extends React.Component {
 
 
             </div >
-
-
 
         )
     }

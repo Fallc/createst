@@ -1,3 +1,5 @@
+// Redux Actions for Researcher Authentication
+
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
@@ -8,6 +10,7 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 export const registerUser = (userData, history) => dispatch => {
   axios
     .post("/users/signup", userData)
+    // push to login page after register
     .then(res => history.push("/login"))
     .catch(err =>
       dispatch({
@@ -22,9 +25,7 @@ export const loginUser = userData => dispatch => {
   axios
     .post("/users/login", userData)
     .then(res => {
-      // Save to localStorage
-
-      // Set token to localStorage
+      // Set and save token to localStorage
       const { token } = res.data;
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
@@ -63,6 +64,6 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem("jwtToken");
   // Remove auth header for future requests
   setAuthToken(false);
-  // Set current user to empty object {} which will set isAuthenticated to false
+  // Set current user to empty object which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
 };

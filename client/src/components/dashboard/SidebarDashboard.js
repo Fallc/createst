@@ -1,6 +1,7 @@
+// Sidebar Component for navigation between studies, could be updated with other elements in the future
+
 import React, { Component } from "react";
 import { Link, withRouter } from 'react-router-dom';
-// import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import List from '@material-ui/core/List';
@@ -18,6 +19,7 @@ import axios from 'axios';
 import './SidebarDashboard.css';
 
 class SidebarDashboard extends Component {
+
     state = {
         studies: [],
         open: false
@@ -25,6 +27,7 @@ class SidebarDashboard extends Component {
 
     componentDidMount() {
 
+        // fetch studies based on logged in user id
         axios.get(`/study/${this.props.userID}`)
             .then(res => {
                 this.setState({
@@ -37,6 +40,7 @@ class SidebarDashboard extends Component {
             })
     }
 
+    // Expand, close list on click
     handleClick = () => {
         this.setState(state => ({ open: !state.open }));
     };
@@ -90,7 +94,3 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(connect(mapStateToProps)(SidebarDashboard));
-
-// export default connect(
-//     mapStateToProps
-// )(withRouter(SidebarDashboard));

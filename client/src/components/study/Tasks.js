@@ -1,3 +1,5 @@
+// Tasks Component for handling individual study sequence
+
 import React from 'react';
 
 import axios from 'axios';
@@ -13,10 +15,9 @@ class Tasks extends React.Component {
 
     componentDidMount() {
 
+        // get study and group specific tasks
         axios.get(`/solution/${this.props.match.params.studyid}/${this.props.match.params.groupid}`)
             .then(res => {
-                console.log(res.data);
-
                 this.setState({
                     tasks: res.data,
                 });
@@ -27,6 +28,7 @@ class Tasks extends React.Component {
 
     }
 
+    // method to be passed to child components to externally update tasks counter
     incrementCounter = () => {
         this.setState({
             counter: this.state.counter + 1
@@ -34,7 +36,6 @@ class Tasks extends React.Component {
     }
 
     render() {
-        console.log(this.state.counter, this.state.tasks.length)
         if (this.state.tasks.length === 0) {
             return <div></div>
         } else {

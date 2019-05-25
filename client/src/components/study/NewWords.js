@@ -1,3 +1,5 @@
+// New Words Task Component
+
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import './NewWords.css';
@@ -14,28 +16,24 @@ class NewWords extends Component {
         total: 0,
         taskID: "",
 
-        // words: ['TEA', 'PAPER', 'LAMP', 'PENCIL'],
         words: [],
 
         allowedChars: [''],
         charGreyed: [],
         charGreyedFull: [],
 
-
         values: [''],
 
         shake: false
     }
 
+    // get specific tasks
     getData() {
 
-        // let { counter } = this.state;
         let { counter } = this.props;
 
         axios.get(`/solution/${this.props.match.params.studyid}/${this.props.match.params.groupid}`)
             .then(res => {
-                console.log(res.data);
-
                 this.setState({
                     tasks: res.data,
                 });
@@ -48,9 +46,8 @@ class NewWords extends Component {
             })
     }
 
+    // load and set new configuration based on counter
     setData(counter) {
-        // let words = this.state.tasks[counter].task.map((word) => word.toUpperCase());
-        // let taskID = this.state.tasks[counter]._id;
 
         let words = this.props.tasks[counter].task.map((word) => word.toUpperCase());
         let taskID = this.props.tasks[counter]._id;
@@ -59,19 +56,18 @@ class NewWords extends Component {
             allowedChars: words,
             charGreyed: new Array(((words.join("")).split('')).length).fill(false),
             charGreyedFull: new Array(((words.join("")).split('')).length).fill(false),
-            // counter: this.state.counter + 1,
-            // counter: this.props.counter + 1,
             total: this.state.tasks.length,
             taskID: taskID
         });
     }
 
+    // initial component loading
     componentDidMount() {
         this.setData(this.props.counter)
-        // this.getData();
 
     }
 
+    // update view on counter change
     componentDidUpdate(prevProps) {
         if (this.props.counter !== prevProps.counter) {
             this.setData(this.props.counter)
@@ -79,6 +75,7 @@ class NewWords extends Component {
     }
 
 
+    // display words based on state
     renderWords() {
 
         let count = -1;
@@ -91,6 +88,7 @@ class NewWords extends Component {
 
     }
 
+    // create input fields and buttons
     createUI() {
         return this.state.values.map((el, i) =>
 
@@ -106,23 +104,23 @@ class NewWords extends Component {
     }
 
 
+    // update values in state based on user input, greying out used characters 
     handleChange(i, event) {
         let values = [...this.state.values];
         values[i] = event.target.value.toUpperCase();
-        // console.log(values);
-        // console.log(this.state)
 
         this.setState({
             values: values
         });
 
-
+        // converting arrays
         const fullChars = (this.state.words.join("")).split('');
         const usedChars = values.join("").split('');
 
         const copy = [...usedChars];
 
         let allowedChars = [];
+
         for (let i = 0; i < fullChars.length; i++) {
             let index = copy.indexOf(fullChars[i]);
             if (index === -1) {
@@ -135,6 +133,7 @@ class NewWords extends Component {
             allowedChars: allowedChars
         });
 
+        // helper function to get nth index of a character that exists multiple times
         Array.prototype.nthIndexOf = function (e, n) {
             var index = -1;
             for (var i = 0, len = this.length; i < len; i++) {
@@ -146,6 +145,7 @@ class NewWords extends Component {
             return index;
         };
 
+        // helper function to count number of characters in specific array
         function countInArray(array, what) {
             return array.filter(item => item === what).length;
         }
@@ -153,11 +153,10 @@ class NewWords extends Component {
         const charGreyedCopy = [...this.state.charGreyedFull];
         const mappedChars = [];
 
+
+        // iterating over used characters and updating greyed out character array
         usedChars.forEach((char) => {
             let charIndex;
-
-            console.log(countInArray(mappedChars, char) === 2)
-            console.log(fullChars.nthIndexOf(char, 3))
 
             if (!mappedChars.includes(char)) {
                 charIndex = fullChars.indexOf(char);
@@ -187,11 +186,10 @@ class NewWords extends Component {
         })
 
         this.setState({ charGreyed: charGreyedCopy });
-        // console.log(charGreyedCopy);
     }
 
-    // Deciding if letter is allowed or not. If not, don't display letter.
 
+    // Deciding if letter is allowed or not. If not, don't display letter
     handleKeyPress(i, event) {
 
         let regex = new RegExp("[" + this.state.allowedChars.join("") + "]", "i");
@@ -203,25 +201,25 @@ class NewWords extends Component {
     }
 
     // Adding new empty input value to value array on click
-
     addClick = (e) => {
-
 
         // this.setState(prevState => ({ values: ['', ...prevState.values] }))
         this.setState(prevState => ({ values: [...prevState.values, ''] }))
     }
 
+
     handleNext = (e) => {
         e.preventDefault();
 
+        // create solution object based on current state
         const solutionObject = {
             solution: this.state.values.join().toLowerCase(),
             unused: this.state.allowedChars.join().toLowerCase(),
             task: this.state.taskID
         }
 
-        console.log(solutionObject)
 
+        // post new solution to server
         axios.post(`/solution/${this.props.match.params.studyid}/${this.props.match.params.groupid}`, solutionObject)
             .then(res => {
                 console.log(res.data)
@@ -232,12 +230,13 @@ class NewWords extends Component {
 
         let { counter, total } = this.props;
 
+        // push to end page if all tasks are completed
         if (counter === (total - 1)) {
             this.props.history.push("/finished");
         } else {
             this.props.incrementCounter();
-            // this.setData(counter);
 
+            // reset input values
             this.setState({
                 values: ['']
             });
@@ -247,9 +246,6 @@ class NewWords extends Component {
 
 
     render() {
-        // console.log(this.state.values);
-        // console.log(this.props.counter, this.props.total)
-        // console.log(this.state.counter, this.state.total)
         return (
             <div>
                 <ProgressBar
@@ -279,14 +275,12 @@ class NewWords extends Component {
                                     <button className='next-btn' disabled={this.state.values.every((el) => el.length === 0)} onClick={this.handleNext}>Next</button>
                                 }
 
-                                {/* <button className='next-btn' disabled={this.state.values.every((el) => el.length === 0)} onClick={this.handleNext}>Next</button> */}
                             </form>
                         </div>
                     </div>
                 </div>
 
             </div>
-
 
         );
     }

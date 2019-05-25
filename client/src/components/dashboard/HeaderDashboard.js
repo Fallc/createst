@@ -1,3 +1,5 @@
+// Header for Dashboard Component
+
 import React, { Component } from "react";
 import { withRouter } from 'react-router'
 import { } from "react-router-dom";
@@ -6,11 +8,13 @@ import { logoutUser } from "../../actions/authActions";
 
 import './HeaderDashboard.css';
 
-
 class HeaderDashboard extends Component {
 
+  // Handle Logout
   onLogoutClick = e => {
     e.preventDefault();
+
+    // Logout user and push to login view
     this.props.logoutUser();
     this.props.history.push("/login");
   };
@@ -43,28 +47,6 @@ class HeaderDashboard extends Component {
           </svg>
         </button>
 
-        {/* <svg xmlns="http://www.w3.org/2000/svg" width="300" height="53.511">
-          <g data-name="Gruppe 93">
-            <text transform="translate(71.676 41)" font-size="43" font-family="Lack-Regular, Lack">
-              <tspan x="0" y="0">createst</tspan>
-            </text>
-            <g data-name="Ellipse 99" transform="translate(34.632 14.261)" fill="none" stroke="#f43543" stroke-width="2">
-              <circle cx="15.474" cy="15.474" r="15.474" stroke="none" />
-              <circle cx="15.474" cy="15.474" r="14.474" />
-            </g>
-            <g data-name="Rechteck 690" fill="none" stroke="#ffe748" stroke-width="2">
-              <path stroke="none" d="M0 15.746h28v28H0z" />
-              <path d="M1 16.746h26v26H1z" />
-            </g>
-            <path data-name="Linie 100" fill="none" stroke="#00c325" stroke-width="2" d="M14.368 33.112l40.526-8.105" />
-            <text data-name="by" transform="translate(257.36 50.511)" font-size="13" font-family="UniversNextPro-Light, Univers Next Pro" font-weight="300">
-              <tspan x="0" y="0">by</tspan>
-            </text>
-            <path data-name="Logo_of_the_Technical_University_of_Munich (2)" d="M286.039 40.511v9.618h2.482v-9.618H300V52.3h-2.172v-9.617h-2.482v9.618h-2.171v-9.618h-2.482v9.618h-6.827v-9.618h-2.171v9.618h-2.171v-9.618h-2.172v-2.172z" />
-          </g>
-        </svg> */}
-
-
       </header>
     );
   }
@@ -78,5 +60,3 @@ export default withRouter(connect(
   mapStateToProps,
   { logoutUser }
 )(HeaderDashboard));
-
-// export default HeaderDashboard;

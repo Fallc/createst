@@ -1,3 +1,6 @@
+/* Styling for Authentication Views */
+
+
 .auth-container {
     width: 500px;
     height: 70vh;
@@ -59,12 +62,6 @@ label {
     background-color: transparent;
     height: 2.5rem;
 }
-
-/* input {
-    font-family: Favorit, sans-serif;
-    font-size: 0.875em;
-    font-weight: 200;
-} */
 
 .input-field input:focus + label {
     color: #E8454B !important;

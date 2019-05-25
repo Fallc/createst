@@ -1,9 +1,10 @@
+// Register Component
+
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
-// import classnames from "classnames";
 
 import Header from '../layout/Header';
 
@@ -12,12 +13,8 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
-// import FormHelperText from '@material-ui/core/FormHelperText';
-// import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-
-// import axios from 'axios';
 
 import "./Auth.css";
 
@@ -41,6 +38,8 @@ class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // if errors, update state with errors
+
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
@@ -48,10 +47,13 @@ class Register extends Component {
     }
   }
 
+  // update state on user input
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
 
+
+  // give data to redux action on submit to handle register
   onSubmit = e => {
     e.preventDefault();
 
@@ -60,17 +62,10 @@ class Register extends Component {
       password: this.state.password,
     };
 
-    // axios.post('/users/signup', newUser)
-    //   .then(res =>
-    //     console.log(res.data))
-    //   .catch(err => {
-    //     console.log(err.response)
-    //   });
-
-    // this.props.history.push('/login')
     this.props.registerUser(newUser, this.props.history);
   };
 
+  // password visibility
   handleClickShowPassword = () => {
     this.setState(state => ({ showPassword: !state.showPassword }));
   };
@@ -125,44 +120,6 @@ class Register extends Component {
                   </span>
                 </FormControl>
 
-
-
-                {/* <div className="input-field col s12">
-        <input
-          onChange={this.onChange}
-          value={this.state.email}
-          error={errors.email}
-          id="email"
-          type="email"
-          className={classnames("", {
-            invalid: errors.email || errors.emailnotfound
-          })}
-        />
-        <label htmlFor="email">E-Mail</label>
-        <span className="red-text">
-          {errors.email}
-          {errors.emailnotfound}
-        </span>
-      </div> */}
-
-                {/* <div className="input-field col s12">
-        <input
-          onChange={this.onChange}
-          value={this.state.password}
-          error={errors.password}
-          id="password"
-          type="password"
-          className={classnames("", {
-            invalid: errors.password || errors.passwordincorrect
-          })}
-        />
-        <label htmlFor="password">Password</label>
-        <span className="red-text">
-          {errors.password}
-          {errors.passwordincorrect}
-        </span>
-      </div> */}
-
                 <div className="col s12">
                   <button
                     type="submit"
@@ -199,5 +156,3 @@ export default connect(
   mapStateToProps,
   { registerUser }
 )(withRouter(Register));
-
-// export default Register;

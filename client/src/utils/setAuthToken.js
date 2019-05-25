@@ -1,3 +1,5 @@
+// Helper function to set auth token to axios headers
+
 import axios from "axios";
 
 const setAuthToken = token => {

@@ -1,6 +1,8 @@
+// Study Component
+
 import React from 'react';
+
 import { Link, withRouter } from 'react-router-dom';
-// import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import axios from 'axios';
@@ -27,16 +29,12 @@ import './Study.css';
 import Plot from 'react-plotly.js';
 
 import HeaderDashboard from './HeaderDashboard';
-import SidebarDashboard from './SidebarDashboard';
 import DeleteStudy from './DeleteStudy';
 import EditStudy from './EditStudy';
 
 import Tooltip from 'react-tooltip-lite';
 import { GooSpinner } from "react-spinners-kit";
 import { CSVLink } from "react-csv";
-
-// import createPlotlyComponent from 'react-plotly.js/factory';
-// import Plotly from 'plotly.js-cartesian-dist'
 
 
 class Study extends React.Component {
@@ -61,12 +59,13 @@ class Study extends React.Component {
     }
 
     componentDidMount() {
+
+        // fetch specific study data
         axios.get(`/study/${this.props.userID}/` + this.props.match.params.id)
             .then(res => {
                 console.log(res.data);
 
                 this.setState({
-                    // study_name: res.data.study.study_name,
                     study_name: res.data.study_name,
                     study_description: res.data.description,
                     tasks: res.data.tasks,
@@ -74,43 +73,37 @@ class Study extends React.Component {
                     newWords_count: res.data.tasks.filter((obj) => obj.task_type === "Neue_Wörter").length,
                     groups: res.data.groups,
                     study_open: res.data.open,
-                    // participants_count: this.getTotalParticipants(),
                     participants_count: res.data.groups.reduce((a, b) => a + (b['participants_count'] || 0), 0),
-                    // participants_count: 2,
                     date: new Date(res.data.createdAt).toLocaleDateString(),
                     study_link: res.data.study_link,
                     solutions: res.data.solutions,
 
                     isLoading: false
                 });
-                console.log(this.state);
             })
             .catch(err => {
                 console.log(err);
-                // this.setState({ isLoading: false });
             })
 
 
+        // Fetch csv download data
         axios.get(`/study/${this.props.userID}/${this.props.match.params.id}/download`)
             .then(res => {
-                console.log(res.data);
-
                 this.setState({
                     download: res.data
                 });
-                console.log(this.state);
             })
             .catch(err => {
                 console.log(err);
             })
     }
 
+    // Update view when state has changed
     componentDidUpdate(prevProps, prevState) {
 
         if (prevState.isUpdated !== this.state.isUpdated || prevProps.match.params.id !== this.props.match.params.id) {
             axios.get(`/study/${this.props.userID}/` + this.props.match.params.id)
                 .then(res => {
-                    // console.log(res.data);
                     this.setState({
                         study_name: res.data.study_name,
                         study_description: res.data.description,
@@ -119,9 +112,7 @@ class Study extends React.Component {
                         newWords_count: res.data.tasks.filter((obj) => obj.task_type === "Neue_Wörter").length,
                         groups: res.data.groups,
                         study_open: res.data.open,
-                        // participants_count: this.getTotalParticipants(),
                         participants_count: res.data.groups.reduce((a, b) => a + (b['participants_count'] || 0), 0),
-                        // participants_count: 2,
                         date: new Date(res.data.createdAt).toLocaleDateString(),
                         study_link: res.data.study_link,
                         solutions: res.data.solutions,
@@ -131,17 +122,18 @@ class Study extends React.Component {
                 })
                 .catch(err => {
                     console.log(err);
-                    // this.setState({ isLoading: false })
                 })
         }
     }
 
+    // Method to be passed to child component to update state externally
     updateView = () => {
         this.setState({
             isUpdated: !this.state.isUpdated
         })
     }
 
+    // open & close dialog for closing study
     handleClickOpen = () => {
         this.setState({ open: true });
     }
@@ -150,96 +142,32 @@ class Study extends React.Component {
         this.setState({ open: false });
     }
 
+    // handle close study click
     handleCloseStudy = (e) => {
         e.preventDefault();
+
+        // put request to mark study as closed
         axios.put(`/study/${this.props.userID}/` + this.props.match.params.id + '/close')
             .then(res => {
-                console.log(res);
 
-                // this.props.history.push("/dashboard");
+                // update view after closing study
+                this.setState({
+                    isUpdated: !this.state.isUpdated
+                })
+
             })
             .catch(err => {
                 console.log(err.response);
             });
-        this.setState({
-            isUpdated: !this.state.isUpdated
-        })
+
         this.setState({ open: false });
 
     }
 
-    // sum(key) {
-    //     return this.reduce((a, b) => a + (b[key] || 0), 0);
-    // }
-
-    // groups = [
-    //     {
-    //         solutions: [],
-    //         _id: "5cb4d2dfcbb0168dad1ae951",
-    //         group_name: "Group 1",
-    //         participants_count: 5
-    //     },
-    //     {
-    //         solutions: [],
-    //         _id: "5cb4d2dfcbb0168dad1ae952",
-    //         group_name: "Group 2",
-    //         participants_count: 5
-    //     },
-    //     {
-    //         solutions: [],
-    //         _id: "5cb644ac301d976187cee288",
-    //         group_name: "Group 3",
-    //         participants_count: 5
-    //     }
-    // ];
-
-    getTotalParticipants = () => {
-        return this.state.groups.reduce((a, b) => a + (b['participants_count'] || 0), 0);
-    }
-
-    getTaskLength = (taskType) => {
-        return this.state.tasks.filter((obj) => obj.task_type === taskType).length;
-    }
-
-    getMeanValue = (type) => {
-        // const addedValues = this.state.solutions.reduce((a, b) => {
-        //     return a + b["neu"];
-        // }, 0);
-        let addedNoveltyValue = 0;
-        for (let i = 0; i < this.state.solutions.length; i++) {
-            let solution = (((this.state.solutions[i] || {}).solution || {})[type]);
-            // console.log(solution);
-            addedNoveltyValue += solution;
-        }
-        // console.log(addedNoveltyValue);
-
-        // const solution = this.state.solutions[0].solution && this.state.solutions[0].solution.neu ? this.state.solutions[0].solution.neu : null;
-
-        // const solution = (((this.state.solutions[0] || {}).solution || {}).neu);
-        // console.log(solution);
-        // console.log(this.state.solutions[0]);
-        // console.log(this.state.solutions[0]["solution"]);
-        const valueCount = this.state.solutions.length;
-        // console.log(addedValues);
-        return addedNoveltyValue / valueCount;
-    }
-
-    // noveltyValue = this.getMeanValue("neu");
-    // usefulnessValue = this.getMeanValue("useful");
-    // creativityScore = (this.noveltyValue + this.usefulnessValue) / 2;
-
-    // id = 0;
-    // createData = (name, usefulnessValue, noveltyValue, creativityScore) => {
-    //     this.id += 1;
-    //     return { usefulnessValue, noveltyValue, creativityScore };
-    // }
-
-    // rows = [
-    //     this.createData('Group 1', this.usefulnessValue, this.noveltyValue, this.creativityScore)
-    // ];
 
     render() {
 
+        // rows for results table
         const rows = [];
 
         this.state.groups.map((group, index) => {
@@ -248,26 +176,14 @@ class Study extends React.Component {
 
         })
 
-        console.log(rows);
-
-
-        // console.log(this.state)
-        // console.log(`/study/${this.props.userID}/` + this.props.match.params.id + '/close');
-        // console.log(`/study/${this.props.userID}/` + this.props.match.params.id);
-        const noveltyValue = this.getMeanValue("neu");
-        const usefulnessValue = this.getMeanValue("useful");
-        const creativityScore = (noveltyValue + usefulnessValue) / 2;
-        console.log(this.getTotalParticipants());
-
-
 
         Array(this.state.solutions.length).fill();
 
+        // sort solutions array for data extraction
         const sortedSolutionsArray = this.state.solutions.sort(function (a, b) {
             return b.group.localeCompare(a.group);
         })
 
-        console.log(sortedSolutionsArray);
 
         const yNovelty = [];
         const yUsefulness = [];
@@ -283,13 +199,7 @@ class Study extends React.Component {
             yUsefulness.push(solution.solution.useful);
         });
 
-        // this.state.solutions.map((solution, index) => {
-        //     yNovelty.push(solution.solution.neu);
-        //     yUsefulness.push(solution.solution.useful);
-        // });
-
-        console.log(xGroups, yNovelty, yUsefulness);
-
+        // data configured for boxplot
         const trace1 = {
             y: yNovelty,
             x: xGroups,
@@ -327,8 +237,6 @@ class Study extends React.Component {
             <React.Fragment>
 
                 <HeaderDashboard />
-                {/* <SidebarDashboard /> */}
-
 
                 <div style={{ paddingTop: "60px", paddingLeft: "300px", minHeight: "100vh", backgroundColor: "#F8F8F8" }}>
 
@@ -377,10 +285,7 @@ class Study extends React.Component {
                                     </div>)
 
                                     : (<div className="valign-center">
-                                        {/* <button className="lock-btn"> */}
                                         <Lock style={{ fill: '#3100FF', marginRight: '0.5rem' }} />
-                                        {/* </button> */}
-
                                         <span>Study Closed</span>
                                     </div>)}
 
@@ -425,7 +330,6 @@ class Study extends React.Component {
                                 style={{ marginBottom: "0" }}>
                                 <Grid item xs={4}>
 
-                                    {/* <h2>{this.state.study_name}</h2> */}
                                     <div id="study-description-card">
                                         <h3 className="card-heading">DESCRIPTION</h3>
                                         <p>{this.state.study_description}</p>
@@ -490,19 +394,15 @@ class Study extends React.Component {
                                     </div>
 
 
-
                                     {this.state.study_open ? (
                                         <div id="study-group-links">
                                             <h3 className="card-heading">STUDY LINKS</h3>
                                             <p>Share the links below with the appropriate test groups.</p>
                                             {this.state.study_link.map((link, index) => (
                                                 <React.Fragment key={index}>
-                                                    {/* {console.log(this.state.groups[index].group_name)} */}
-                                                    {/* <h3 key={index}>Group {index + 1}:</h3> */}
                                                     <h3 key={index}>{this.state.groups[index].group_name}:</h3>
                                                     <div className="link-wrapper">
                                                         <textarea readOnly onChange={this.onChange} rows={2} cols={30} value={link} />
-                                                        {/* <span>{link}</span> */}
                                                         <Tooltip
                                                             content="COPIED TO CLIPBOARD!"
                                                             className="target"
@@ -536,7 +436,6 @@ class Study extends React.Component {
                                         )}
 
 
-
                                 </Grid>
                                 <Grid item xs={8} style={{ paddingRight: "50px" }}>
                                     <Grid container direction="row"
@@ -567,9 +466,6 @@ class Study extends React.Component {
                                                                     <TableCell align="right">{row.novelty_mean}</TableCell>
                                                                     <TableCell align="right">{row.creativity_mean}</TableCell>
 
-                                                                    {/* <TableCell align="right">{usefulnessValue.toFixed(2)}</TableCell>
-                                                                <TableCell align="right">{noveltyValue.toFixed(2)}</TableCell>
-                                                                <TableCell align="right">{creativityScore.toFixed(2)}</TableCell> */}
                                                                 </TableRow>
                                                             ))}
                                                         </TableBody>
@@ -577,12 +473,7 @@ class Study extends React.Component {
                                                 ) : (<p> No entries yet </p>)}
                                             </div>
                                         </Grid>
-                                        {/* <Grid item xs={6}>
-                                    <div className="study-participants">
-                                        <h3 className="card-heading">PARTICIPANTS</h3>
-                                    </div>
 
-                                </Grid> */}
                                         <Grid item xs={12}>
                                             <div className="study-graph">
                                                 <h3 className="card-heading">GRAPH</h3>
@@ -598,20 +489,6 @@ class Study extends React.Component {
 
                                 </Grid>
                             </Grid>
-
-                            {/* /* <h3>Number of Groups: {this.state.groups.length}</h3>
-                    <h3>Created on: {this.state.date}</h3>
-                    {this.state.study_open ? <h3>Study Open</h3> : <h3>Study Closed</h3>}
-                    <h3>Participants: {this.state.participants_count}</h3>
-                    <h3>Blocks Count: {this.state.blocks_count}</h3>
-                    <h3>New Words Count: {this.state.newWords_count}</h3>
-                    {this.state.study_link.map((link, index) => (
-                        <h3 key={index}>Link {index + 1}: {link}</h3>
-                    ))}
-
-                    <h3>Novelty Mean Value: {isNaN(noveltyValue) ? "No entries yet" : noveltyValue.toFixed(2)}</h3>
-                    <h3>Usefulness Mean Value: {isNaN(usefulnessValue) ? "No entries yet" : usefulnessValue.toFixed(2)}</h3>
-                    <h3>Creativity Score: {isNaN(creativityScore) ? "No entries yet" : creativityScore.toFixed(2)}</h3> */ }
 
 
                         </React.Fragment>) : (<div style={{ position: "fixed", width: "70%", height: "90%", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -635,10 +512,4 @@ const mapStateToProps = state => ({
     userID: state.auth.user.id
 });
 
-// export default withRouter(connect(
-//     mapStateToProps
-// )(Study));
-
 export default withRouter(connect(mapStateToProps)(Study));
-
-// export default Study;

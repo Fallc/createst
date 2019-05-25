@@ -1,3 +1,5 @@
+// Functional Study Card Component
+
 import React from 'react';
 
 import { People, Lock, LockOpen, KeyboardArrowRightRounded } from '@material-ui/icons';

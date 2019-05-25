@@ -1,3 +1,5 @@
+// End Page Component after finishing all tasks
+
 import React from 'react';
 
 import './Finish.css';

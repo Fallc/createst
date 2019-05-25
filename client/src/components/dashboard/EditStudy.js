@@ -1,3 +1,5 @@
+// Modal component for editing existing study
+
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -12,9 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import GroupIcon from '@material-ui/icons/Group';
 
 import { withRouter } from "react-router-dom";
-// import PropTypes from "prop-types";
 import { connect } from "react-redux";
-// import Tooltip from 'react-tooltip-lite';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import axios from 'axios';
@@ -33,6 +33,7 @@ class EditStudy extends React.Component {
     }
 
 
+    // Change text fields based on user input
     onChangeStudyName = (e) => {
         this.setState({ study_name: e.target.value });
     };
@@ -49,6 +50,7 @@ class EditStudy extends React.Component {
         this.setState({ newWords_count: e.target.value });
     };
 
+    // Change group count and create new group objects in groups based on group count
     onChangeGroupCount = (e) => {
         let groupCount = this.state.group_count;
 
@@ -61,15 +63,16 @@ class EditStudy extends React.Component {
         }
 
         this.setState({ group_count: e.target.value });
-        // console.log(this.state.groups);
     };
 
+    // Change specific group name based on user input
     onChangeGroupName(i, e) {
         let groups = [...this.state.groups];
         groups[i].group_name = e.target.value;
         this.setState({ groups });
     }
 
+    // create input fields based on group count
     createGroupInputFields() {
         let groupInputFields = [];
         for (let i = 0; i < this.state.group_count; i++) {
@@ -89,6 +92,7 @@ class EditStudy extends React.Component {
     }
 
 
+    // Opening & closing modal
     handleClickOpen = () => {
         this.setState({ open: true });
     };
@@ -97,6 +101,8 @@ class EditStudy extends React.Component {
         this.setState({ open: false });
     };
 
+
+    // Handling submit of changed study
     handleEditSubmit = (e) => {
         e.preventDefault();
 
@@ -109,19 +115,15 @@ class EditStudy extends React.Component {
             groups: this.state.groups
         }
 
-        console.log(editedStudy);
-
+        // put request to change study data on server
         axios.put(`/study/${this.props.userID}/` + this.props.studyID, editedStudy)
             .then(res => {
                 console.log(res);
                 this.props.action();
-                // this.props.history.push("/dashboard");
             })
             .catch(err => {
                 console.log(err.response);
             });
-
-
 
         this.setState({ open: false });
 
@@ -129,9 +131,6 @@ class EditStudy extends React.Component {
 
     render() {
 
-        // console.log(`/study/${this.props.userID}/` + this.props.studyID);
-        // console.log(this.state);
-        // console.log(this.state.groups)
         return (
             <div>
                 {(this.props.participants_count === 0) ? (

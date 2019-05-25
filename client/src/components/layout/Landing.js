@@ -1,3 +1,5 @@
+// Landing Page Component after initial page load
+
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Tilt from 'react-tilt';
@@ -69,20 +71,12 @@ class Landing extends Component {
             </div>
 
             <div className="col-s6">
-              {/* <h1>A new way to assess creativity.</h1> */}
               <h1 class="landing-heading">A new way to assess <span className="text-highlight">creativity.</span></h1>
               <p className="landing-text">
                 Carry out test series to determine the potential for environmental changes in enhancing creative performance — objective and online.
             </p>
             </div>
             <div className="col-s6" style={{ marginTop: "1rem" }}>
-              {/* <Link to="/signup">
-                <button className="sign-up-button">Sign Up</button>
-              </Link> */}
-              {/* <Link to="/login">
-                <button className="log-in-button">Log In</button>
-              </Link> */}
-
               <Link to="/login" className="log-in-button">
                 Log In
               </Link>

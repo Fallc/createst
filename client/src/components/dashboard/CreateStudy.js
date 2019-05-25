@@ -1,7 +1,8 @@
+// Modal component for creating new study
+
 import React from 'react';
 
 import { withRouter } from "react-router-dom";
-// import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import Button from '@material-ui/core/Button';
@@ -13,7 +14,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import GroupIcon from '@material-ui/icons/Group';
-// import SvgIcon from '@material-ui/core/SvgIcon';
 
 import axios from 'axios';
 
@@ -24,96 +24,42 @@ class CreateStudy extends React.Component {
         study_description: '',
         blocks_count: '',
         newWords_count: '',
-
         groups: [{ group_name: '' }],
-
-        group_count: 1,
-        study_open: false,
-        date: ''
+        group_count: 1
     };
 
+    // Change group count value
     onChangeGroupCount = (e) => {
         let groupCount = this.state.group_count;
 
-        // console.log(e.target.value);
-        // console.log(groupCount);
-        // let i = e.target.value;
-        // let groupArrayCount = this.state.groups.length;
-
-        // this.setState({
-        //     groups: this.state.groups.splice(e.target.value, this.state.groups.length)
-        // })
-
         this.state.groups.splice(e.target.value, this.state.groups.length);
 
-        // this.setState(prevState => ({
-        //     groups: prevState.groups.splice(e.target.value, this.state.groups.length)
-        // }));
-
-        // console.log(newGroupsArray)
-
-        // if (groupArrayCount > e.target.value) {
-        //     // let groups = [...this.state.groups];
-        //     // groups.splice(-1, 1);
-        //     let newGroupsArray = this.state.groups.splice(e.target.value, this.state.groups.length);
-        //     this.setState({ groups: newGroupsArray });
-
-        // }
-
-        // for (groupCount; groupCount > e.target.value; groupCount--) {
-        //     // let groups = [...this.state.groups];
-        //     // groups.splice(-1, 1);
-        //     this.setState({
-        //         groups: this.state.groups.splice(-1, 1)
-        //     });
-        //     // this.setState(prevState => ({
-        //     //     groups: prevState.groups.splice(-1, 1)
-        //     // }));
-        // }
-
-        // else {
-        //     this.setState(prevState => ({
-        //         groups: [...prevState.groups, { group_name: '' }]
-        //     }));
-        // }
         for (groupCount; groupCount < e.target.value; groupCount++) {
+            // create new group object in groups based on group count value
             this.setState(prevState => ({
                 groups: [...prevState.groups, { group_name: '' }]
             }));
 
-            // console.log(this.state.groups);
-
         }
-        // for (groupArrayCount; e.target.value < groupArrayCount; groupArrayCount--) {
-        //     console.log(groupArrayCount);
-        //     let groups = [...this.state.groups];
-        //     // groups.splice(-1, 1)
-        //     this.setState({ groups });
 
-        //     // this.setState(prevState => ({
-        //     //     groups: prevState.groups.splice(-1, 1)
-        //     // }));
-
-        // }
-
-
+        // update group count value
         this.setState({ group_count: e.target.value });
-        // console.log(this.state.groups);
     };
 
+    // Change group name based on user input
     onChangeGroupName(i, e) {
+        // copy old state
         let groups = [...this.state.groups];
+
         groups[i].group_name = e.target.value;
 
         this.setState({ groups });
-        // console.log(groups);
     }
 
+    // Create input fields based on group count in state
     createGroupInputFields() {
         let groupInputFields = [];
         for (let i = 0; i < this.state.group_count; i++) {
-            // <div key={i}>
-            // groupInputFields.push(<input type="text" value={this.state.groups[0].name || ''} onChange={this.onChangeGroupName.bind(this, i)} />);
             groupInputFields.push(<TextField
                 margin="dense"
                 key={i}
@@ -125,18 +71,12 @@ class CreateStudy extends React.Component {
                 onChange={this.onChangeGroupName.bind(this, i)}
                 fullWidth
             />);
-            // </div>
         }
 
         return <div>{groupInputFields}</div>;
-        // return this.state.values.map((el, i) =>
-        //     <div key={i}>
-        //         <input type="text" autoFocus value={el || ''} onKeyPress={this.handleKeyPress.bind(this, i)} onChange={this.handleChange.bind(this, i)} />
-        //         {/* <input type='button' value='remove' onClick={this.removeClick.bind(this, i)}/> */}
-        //     </div>
-        // )
     }
 
+    // Updating state with text field user input
     onChangeStudyName = (e) => {
         this.setState({ study_name: e.target.value });
     };
@@ -154,26 +94,21 @@ class CreateStudy extends React.Component {
     };
 
 
-
+    // Submitting form
     handleSubmit = (e) => {
         e.preventDefault();
 
+        // Creating study object based on state
         const newStudy = {
             study_name: this.state.study_name,
             description: this.state.study_description,
             Tetris_count: this.state.blocks_count,
             Neue_Wörter_count: this.state.newWords_count,
-
             groups: this.state.groups
-            // group_count: this.state.group_count,
-            // study_open: true,
-            // date: new Date().toLocaleString()
         }
 
-        console.log(newStudy);
-        // console.log(JSON.stringify(newStudy));
 
-        // Axios Post Call
+        // Post request with logged in user id and created study object
         axios.post(`/study/${this.props.userID}`, newStudy)
             .then(res => {
                 this.props.action();
@@ -183,6 +118,7 @@ class CreateStudy extends React.Component {
                 console.log(err.response)
             });
 
+        // Resetting state
         this.setState({
             open: false,
             study_name: '',
@@ -190,21 +126,11 @@ class CreateStudy extends React.Component {
             blocks_count: '',
             newWords_count: '',
             group_count: 1,
-
             groups: [{ group_name: '' }],
-
-            study_open: false,
-            date: ''
         })
     };
 
-    // handleChange(i, event) {
-    //     let values = [...this.state.values];
-    //     values[i] = event.target.value;
-    //     console.log(values);
-    //     this.setState({ values });
-    // }
-
+    // Opening & Closing Modal
     handleClickOpen = () => {
         this.setState({ open: true });
     };
@@ -216,9 +142,6 @@ class CreateStudy extends React.Component {
     render() {
         return (
             <div className="createStudyButton">
-                {/* <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
-                    Create new Study
-                </Button> */}
                 <button id="create-study-btn" onClick={this.handleClickOpen}>
                     <span>Create Study</span>
                     <svg style={{ fill: "white" }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -382,5 +305,3 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps
 )(withRouter(CreateStudy));
-
-// export default CreateStudy;

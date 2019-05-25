@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import DonutChart from 'react-donut-chart';
 import {
     BarChart, Bar,
-    // Cell,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
 
@@ -12,31 +11,7 @@ import './Overview.css';
 
 class Overview extends React.Component {
 
-    state = {
-
-    }
-
-    // data = [
-    //     {
-    //         studyName: 'Test 1', cscore: 0.62
-    //     },
-    //     {
-    //         studyName: 'Test 2', cscore: 0.70
-    //     },
-    //     {
-    //         studyName: 'Test 3', cscore: 0.47
-    //     },
-    //     {
-    //         studyName: 'Test 4', cscore: 0.39
-    //     },
-    //     {
-    //         studyName: 'Test 5', cscore: 0.81
-    //     },
-    //     {
-    //         studyName: 'Test 6', cscore: 0.79
-    //     },
-    // ]
-
+    // Calculate graph data based on studies for bar chart
     calculateGraphData = () => {
         let data = [];
         this.props.studies.map((study) => (
@@ -45,6 +20,7 @@ class Overview extends React.Component {
         return data;
     }
 
+    // Calculate open and closed studies for donut chart
     calculateOpenStudies = () => {
         const count = this.props.studies.filter((study) => study.study.open === true).length;
         return count;
@@ -57,10 +33,6 @@ class Overview extends React.Component {
 
     render() {
 
-        // console.log(this.calculateOpenStudies());
-        // console.log(this.calculateGraphData());
-        // console.log(this.props.studies);
-
         return (
             <div style={{ paddingTop: "60px", marginLeft: "290px" }}>
                 <h2>Overview</h2>
@@ -68,7 +40,6 @@ class Overview extends React.Component {
                     <Grid item style={{ padding: "0 80px 20px 0" }}>
                         <div style={{ width: '300px', height: '225px', backgroundColor: 'white' }}>
                             <h3 className="card-heading-overview">STUDIES</h3>
-                            {/* <div style={{ margin: "0 0 0 30px" }}> */}
                             <div style={{ width: '100%', height: '100%', display: "flex", alignItems: "center", justifyContent: "center", margin: "-30px 0 0 0" }}>
                                 <DonutChart
                                     data={[{
@@ -77,20 +48,17 @@ class Overview extends React.Component {
                                     },
                                     {
                                         label: 'Closed',
-                                        // value: 4
                                         value: this.calculateClosedStudies()
                                     }]}
                                     legend={false}
                                     height={200}
                                     width={200}
 
-                                    // colors={['#FFA54D', '#3100FF']}
                                     colors={['#FFA54D', '#AC98FF']}
                                     strokeColor={'white'}
                                     clickToggle={false}
                                     innerRadius={0.5}
                                     outerRadius={0.7}
-                                    // formatValues={(values, total) => `${Math.round(values / total * 100)}%`}
                                     formatValues={(values, total) => values} />
                             </div>
 
@@ -108,7 +76,6 @@ class Overview extends React.Component {
                                     <BarChart
                                         width={600}
                                         height={190}
-                                        // data={this.data}
                                         data={this.calculateGraphData()}
                                         margin={{
                                             top: 5, right: 30, left: 20, bottom: 5,
@@ -126,9 +93,6 @@ class Overview extends React.Component {
                         </div>
 
                     </Grid>
-                    {/* <Grid style={{ padding: "0 80px 20px 0" }}>
-                        <div style={{ width: '300px', height: '175px', backgroundColor: 'white' }}></div>
-                    </Grid> */}
                 </Grid>
             </div>
         )

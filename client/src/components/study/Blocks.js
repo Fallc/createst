@@ -1,3 +1,5 @@
+// Blocks Task Component, currently work in progress
+
 import React from 'react';
 import './Blocks.css';
 
@@ -9,6 +11,7 @@ import { ProgressBar } from "react-step-progress-bar";
 
 class Blocks extends React.Component {
 
+    // setting up individual tetrominos and board
     state = {
         tasks: this.props.tasks,
         pieces: [
@@ -98,6 +101,7 @@ class Blocks extends React.Component {
 
     };
 
+    // update component with data of new configuration
     componentDidUpdate(prevProps) {
         if (this.props.counter !== prevProps.counter) {
             this.setData()
@@ -105,11 +109,11 @@ class Blocks extends React.Component {
     }
 
     setData() {
-        let { counter } = this.props;
         this.convertBoardTemplate();
         // console.log('triggered')
     }
 
+    // method to convert fetched board matrix into right data format
     convertBoardTemplate() {
         let boardTemplate = [...this.props.tasks[this.props.counter].task];
 
@@ -125,6 +129,7 @@ class Blocks extends React.Component {
 
     };
 
+    // save data of dragged item
     onDragStart = e => {
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text', e.target.id);
@@ -159,6 +164,7 @@ class Blocks extends React.Component {
         );
     }
 
+    // Render Board Cells
     renderEmptyBoardCell(i) {
         return (
             <li key={i} className="emptyBoardCell" onDragOver={(e) => e.preventDefault()}
@@ -175,6 +181,7 @@ class Blocks extends React.Component {
         );
     }
 
+    // Render Piece Cells
     renderEmptyCell(i) {
         return (
             <li key={i} className="emptyCell"></li>
@@ -197,6 +204,7 @@ class Blocks extends React.Component {
         });
     }
 
+    // Method for rotation on click
     handleClickRotation = (piece, piece_config, j) => {
         // console.log(piece, piece_config, j)
         // console.log(piece[piece_config].length);
@@ -214,12 +222,9 @@ class Blocks extends React.Component {
 
         this.setState(newState);
 
-        // this.setState({
-
-        // })
-
     }
 
+    // render tetrominos
     renderPieces() {
         let counter = 0;
 
@@ -261,6 +266,9 @@ class Blocks extends React.Component {
     //       })}
     //     </div>
 
+    // 
+
+    // handle next button click
     handleNext = (e) => {
         e.preventDefault();
 
@@ -268,9 +276,11 @@ class Blocks extends React.Component {
         let { counter, total } = this.props;
 
         if (counter === total) {
+            // push to finished page when all tasks are completed
             this.props.history.push("/finished");
             // alert("Thanks for participating!")
         } else {
+            // increment counter on parent component (Tasks)
             this.props.incrementCounter();
             // this.setData();
             // this.setData(counter);
@@ -293,11 +303,6 @@ class Blocks extends React.Component {
                     percent={((this.props.counter + 1) / this.props.total) * 100}
                     filledBackground="linear-gradient(to right, rgb(114, 182, 225), #3198D7)"
                 />
-
-                {/* <div className="blocks-description">
-                    <h1 className="blocks-heading">1. Blocks</h1>
-                    <p className="blocks-task-description">Fill in the given form with tetrominoes.</p>
-                </div> */}
 
                 <div className="blocks-description">
                     <div className='wrapper'>
