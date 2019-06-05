@@ -39,7 +39,7 @@ class NewWords extends Component {
                 });
 
                 this.setData(counter);
-                console.log(this.state);
+                // console.log(this.state);
             })
             .catch(err => {
                 console.log(err);
@@ -246,10 +246,11 @@ class NewWords extends Component {
 
 
     render() {
+        console.log(this.props.counter + 1, this.props.total + 1)
         return (
             <div>
                 <ProgressBar
-                    percent={((this.props.counter + 1) / this.props.total) * 100}
+                    percent={((this.props.counter + 2) / (this.props.total + 1)) * 100}
                     filledBackground="linear-gradient(to right, rgb(255, 187, 153), rgb(255, 134, 73))"
                 />
                 <div className='newWords'>
@@ -262,8 +263,8 @@ class NewWords extends Component {
                             </div>
                             <p className="newWords-task-description">Build new words from the letters of the given words.</p>
                         </div>
-
                     </div>
+
                     <div className="container-newWords">
                         <div className="word-container">{this.renderWords()}</div>
                         <div className="input-container">

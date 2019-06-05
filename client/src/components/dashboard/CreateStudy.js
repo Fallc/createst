@@ -26,7 +26,7 @@ class CreateStudy extends React.Component {
         newWords_count: '',
         groups: [{ group_name: '' }],
         group_count: 1
-    };
+    }
 
     // Change group count value
     onChangeGroupCount = (e) => {

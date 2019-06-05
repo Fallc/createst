@@ -20,6 +20,8 @@ import Study from "./components/dashboard/Study";
 import Tasks from "./components/study/Tasks";
 import Finish from "./components/study/Finish";
 import LandingStudy from "./components/study/LandingStudy";
+import StudySequence from "./components/study/StudySequence";
+import Questionnaire from "./components/study/Questionnaire";
 
 import "./App.css";
 import SidebarDashboard from "./components/dashboard/SidebarDashboard";
@@ -70,8 +72,10 @@ class App extends Component {
 
             {/* Study Routes */}
 
+            {/* <Route path="/:studyid/:groupid/active" component={Tasks} /> */}
 
-            <Route path="/:studyid/:groupid/active" component={Tasks} />
+            <Route path="/:studyid/:groupid/active" component={StudySequence} />
+
             <Route path="/finished" component={Finish} />
 
 

@@ -23,7 +23,6 @@ class EditStudy extends React.Component {
 
     state = {
         open: false,
-
         study_name: this.props.study_name,
         study_description: this.props.study_description,
         blocks_count: this.props.blocks_count,

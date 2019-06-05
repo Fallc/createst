@@ -19,15 +19,14 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import "./Auth.css";
 
 class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: "",
-      password: "",
-      showPassword: false,
-      errors: {}
-    };
+
+  state = {
+    email: "",
+    password: "",
+    showPassword: false,
+    errors: {}
   }
+
 
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard

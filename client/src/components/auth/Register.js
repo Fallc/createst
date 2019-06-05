@@ -19,15 +19,14 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import "./Auth.css";
 
 class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
+  
+    state = {
       email: "",
       password: "",
       showPassword: false,
       errors: {}
-    };
-  }
+    }
+  
 
   componentDidMount() {
     // If logged in and user navigates to Register page, should redirect them to dashboard
