@@ -23,12 +23,17 @@ var insertTaskRouter = require('./routes/insertTaskRouter');
 //Connection zu Datenbank und ODM mongoose
 const mongoose = require('mongoose');
 
+// Hier lokale Datenbank anlegen
+
 // const url = 'mongodb://localhost:27017/kreativDB';
 // const connect = mongoose.connect(url, { useNewUrlParser: true });
 // connect.then((db) => {
 //     console.log("Connected correctly to server");
 // }, (err) => { console.log(err); });
 
+
+// Connection to mongoDB Atlas, Cloud Database
+// Falls eigene lokale Datenbank, den unteren Block löschen oder auskommentieren
 const uri = "mongodb+srv://Marcel:marcel94@test-cluster-m3jtf.mongodb.net/test?retryWrites=true";
 
 mongoose.connect(uri, { useNewUrlParser: true })
