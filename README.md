@@ -1,8 +1,8 @@
-# createst
+# Createst
 
-### To launch the application:
+### Launch the Application:
 
-1. Install dependencies in server and client:
+1. Install Dependencies for Server and Client:
 `cd server && npm install`
 `cd client && npm install`
 
@@ -12,4 +12,4 @@
 3. Start the Client:
 `cd client && npm start`
 
-App runs in development mode on http://localhost:3000, Server runs on http://localhost:5000
+Application runs in development mode on http://localhost:3000, Server runs on http://localhost:5000
