@@ -158,26 +158,13 @@ class NewWords extends Component {
         usedChars.forEach((char) => {
             let charIndex;
 
+            let count = countInArray(mappedChars, char);
+
+
             if (!mappedChars.includes(char)) {
                 charIndex = fullChars.indexOf(char);
-            } else if (countInArray(mappedChars, char) === 1) {
-                charIndex = fullChars.nthIndexOf(char, 2)
-            } else if (countInArray(mappedChars, char) === 2) {
-                charIndex = fullChars.nthIndexOf(char, 3)
-            } else if (countInArray(mappedChars, char) === 3) {
-                charIndex = fullChars.nthIndexOf(char, 4)
-            } else if (countInArray(mappedChars, char) === 4) {
-                charIndex = fullChars.nthIndexOf(char, 5)
-            } else if (countInArray(mappedChars, char) === 5) {
-                charIndex = fullChars.nthIndexOf(char, 6)
-            } else if (countInArray(mappedChars, char) === 6) {
-                charIndex = fullChars.nthIndexOf(char, 7)
-            } else if (countInArray(mappedChars, char) === 7) {
-                charIndex = fullChars.nthIndexOf(char, 8)
-            } else if (countInArray(mappedChars, char) === 8) {
-                charIndex = fullChars.nthIndexOf(char, 9)
-            } else if (countInArray(mappedChars, char) === 9) {
-                charIndex = fullChars.nthIndexOf(char, 10)
+            } else {
+                charIndex = fullChars.nthIndexOf(char, count + 1)
             }
 
             mappedChars.push(char)
