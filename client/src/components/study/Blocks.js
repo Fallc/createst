@@ -110,7 +110,6 @@ class Blocks extends React.Component {
 
     setData() {
         this.convertBoardTemplate();
-        // console.log('triggered')
     }
 
     // method to convert fetched board matrix into right data format
